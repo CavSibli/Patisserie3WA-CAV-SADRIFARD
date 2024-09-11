@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import './App.css'; // Garde les styles généraux
+import './App.css';
+import {Game} from "./pages/game/game.jsx"; // Garde les styles généraux
 
 const App = () => {
   return (
@@ -15,10 +16,10 @@ const App = () => {
             <Link to="/login">Login</Link>
           </nav>
         </header>
-        
+        <Game/>
         <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          {/*<Route path="/home" element={<Home />} />*/}
+          {/*<Route path="/login" element={<Login />} />*/}
         </Routes>
       </div>
     </Router>
