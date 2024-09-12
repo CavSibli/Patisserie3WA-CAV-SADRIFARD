@@ -1,17 +1,17 @@
+// src/pages/Login.jsx
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { login } from '../features/authSlice'; 
-import './Login.module.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../features/authSlice';
 
 const Login = () => {
-  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.auth);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-   
-    dispatch(login({ email, password }));
+    dispatch(loginUser({ email, password }));  // Appelle la thunk pour envoyer les informations d'identification
   };
 
   return (
@@ -34,8 +34,11 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Connexion en cours...' : 'Login'}
+        </button>
       </form>
+      {error && <p>Erreur : {error}</p>}  // Affiche les erreurs si elles existent
     </div>
   );
 };
