@@ -8,6 +8,7 @@ export const AdminApiSlice = createApi({
             query: () => ({
                 url: "/pastries",
                 method: "GET",
+                credentials: "include",
             }),
         }),
         addNewItem: builder.mutation({
@@ -15,6 +16,7 @@ export const AdminApiSlice = createApi({
                 url: "/pastrie",
                 method: "POST",
                 body: item,
+                credentials: "include",
             }),
         }),
         editItem: builder.mutation({
@@ -22,12 +24,16 @@ export const AdminApiSlice = createApi({
                 url: `/pastrie/${item.id}`,
                 method: "PUT",
                 body: item,
+                credentials: "include",
+
             }),
         }),
         deleteItem: builder.mutation({
             query: (id) => ({
                 url: `/pastrie/${id}`,
                 method: "DELETE",
+                credentials: "include",
+
             }),
         }),
     }),

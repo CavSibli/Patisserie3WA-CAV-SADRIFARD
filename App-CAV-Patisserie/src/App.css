@@ -21,6 +21,15 @@ header {
   color: #ffffff;
 }
 
+.app-header{
+    background-color: #2d3e50;
+    padding: 10px 20px;
+    display: block;
+    align-items: center;
+    text-align: center;
+    color: #ffffff
+}
+
 footer {
   background-color: #2d3e50;
   padding: 1px 20px;
