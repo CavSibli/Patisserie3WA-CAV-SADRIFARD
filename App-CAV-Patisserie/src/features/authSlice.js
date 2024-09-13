@@ -1,63 +1,55 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'; // importer les fonction redux pour creer des slices et créer des actions asynchrone pour gerer une requete API
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const BACKEND_URL = 'http://localhost:3001'; //base de l'url du Backend 
 
-//
 export const loginUser = createAsyncThunk(
-  'auth/loginUser', //type 
+  'auth/loginUser',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${BACKEND_URL}/login`, { 
+      const response = await fetch('http://localhost:3001/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),  
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Erreur de connexion');
+        throw new Error('Erreur lors de la connexion');
       }
 
       const data = await response.json();
+      console.log(data);
       localStorage.setItem('token', data.token);  
-      return data.user; 
+      return data.user;  
     } catch (err) {
       return rejectWithValue(err.message);
     }
   }
 );
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState: {
     isAuthenticated: false,
     user: null,
-    isLoading: false,
     error: null,
   },
   reducers: {
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
-      localStorage.removeItem('token'); 
+      localStorage.removeItem('token');  
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
-      })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isAuthenticated = true;
         state.user = action.payload;
-        state.isLoading = false;
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;  
+        state.isAuthenticated = false;
+        state.error = action.payload;
       });
   },
 });
