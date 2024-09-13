@@ -1,8 +1,8 @@
 import {useDispatch, useSelector} from "react-redux";
-import {selectPatisserie, winning} from "../../features/game/game-slice.jsx";
-import { useState} from "react";
+import {selectPatisserie, winning} from "../../features/game/game-slice.js";
+import {useEffect, useState} from "react";
 import "./game.scss";
-import {useGetWinnersItemsMutation} from "../../features/game/game-api.jsx";
+import {useGetWinnersItemsMutation} from "../../features/game/game-api.js";
 
 export const Game = () => {
     const dispatch = useDispatch()
@@ -11,9 +11,22 @@ export const Game = () => {
     const [isWinner, setIsWinner] = useState(null)
     const [getWinnersItems] = useGetWinnersItemsMutation()
     const [rollCount, setRollCount] = useState(3)
+    const [isGameBlocked, setIsGameBlocked] = useState(false)
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+    console.log(localStorage.getItem('lastPlayDate'))
+    useEffect(() => {
+        const lastPlayDate = localStorage.getItem('lastPlayDate')
+        const today = new Date().toISOString().split('T')[0]
+        console.log(lastPlayDate === today)
+        if (lastPlayDate === today) {
+            // setIsGameBlocked(true)
+        }
+    }, []);
 
-    const isButtonDisabled = rollCount === 0 || isWinner;
-    const buttonStyle = isButtonDisabled ? { background: 'gray' } : {};
+    useEffect(() => {
+        setIsButtonDisabled(rollCount === 0 || isWinner || isGameBlocked);
+    }, [rollCount, isWinner, isGameBlocked]);
+    const buttonStyle = isButtonDisabled ? {background: 'gray'} : {};
     const roll = async () => {
         setRollCount(rollCount - 1)
 
@@ -31,11 +44,19 @@ export const Game = () => {
 
         if (maxCount > 1) {
             try {
-                const data = await getWinnersItems(maxCount);
-                dispatch(winning({ count: maxCount, patisserie: data.data }));
+                const data = await getWinnersItems(maxCount - 1);
+                dispatch(winning({count: maxCount, patisserie: data.data}));
+                const today = new Date().toISOString().split("T")[0];
+                localStorage.setItem("lastPlayDate", today);
+                setIsGameBlocked(true);
             } catch (error) {
                 console.error('Error fetching winners items:', error);
             }
+        }
+        if (rollCount === 0) {
+            const today = new Date().toISOString().split("T")[0];
+            localStorage.setItem("lastPlayDate", today);
+            setIsGameBlocked(true);
         }
     }
     return (
@@ -58,30 +79,30 @@ export const Game = () => {
                 {dices.map((dice, index) => (
                     <div key={index}>
                         <img
-                            src={`../../../public/${dice !== 0 ? `dice${dice}.png` : "faq.png"}`}
+                            src={`../../../public/game/${dice !== 0 ? `dice${dice}.png` : "faq.png"}`}
                             alt={""}
                         />
                     </div>
                 ))}
             </div>
-            {isWinner === true ? (
-                <div className={"winner"}>
+            {isWinner !== null && (
+                <div className={isWinner ? "winner" : "lose"}>
                     <div>
-                        <h2>Bravo, vous avez gagné!</h2>
-                        <ul>
-                            {patisserie && patisserie.map((item, index) => (
-                                <li key={index}>{item.name}</li>
-                            ))}
-                        </ul>
+                        <h2>{isWinner ? "Bravo, vous avez gagné!" : "Perdu"}</h2>
+                        {isWinner && (
+
+                            <ul>
+                                {patisserie?.map((item, index) => (
+                                    <li key={index}>{item.name}</li>
+                                ))}
+                            </ul>
+
+                        )}
                     </div>
                 </div>
-            ) : isWinner === false ? (
-                <div className={"lose"}>
-                    <h2>Perdu</h2>
-                </div>
-            ) : null}{" "}
+            )}
             <button disabled={isButtonDisabled} style={buttonStyle} onClick={roll} className={"button"}>
-                {isButtonDisabled ? "Vous n'avez plus d'essais" :`Il vous reste ${rollCount} essais`}
+                {isButtonDisabled ? "Vous n'avez plus d'essais" : `Il vous reste ${rollCount} essais`}
             </button>
         </main>
     )

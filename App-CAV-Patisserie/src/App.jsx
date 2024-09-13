@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import './App.css';
-import {Game} from "./pages/game/game.jsx"; // Garde les styles généraux
+import {Game} from "./pages/game/game.jsx";
+import {Admin} from "./pages/admin/admin.jsx"; // Garde les styles généraux
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             <Link to="/login">Login</Link>
           </nav>
         </header>
+        <Admin/>
         <Game/>
         <Routes>
           {/*<Route path="/home" element={<Home />} />*/}
