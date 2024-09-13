@@ -1,0 +1,73 @@
+.main-container {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 1rem;
+  box-shadow: black 0 0 10px 0;
+}
+
+.text h1 {
+  color: #000;
+  text-align: center;
+}
+
+.text p {
+  color: #000;
+  text-align: left;
+}
+
+$primary-color: #007bff;
+
+.button {
+  background-color: $primary-color;
+  color: #fff;
+  padding: 10px 20px;
+  width: fit-content;
+  margin: 0 auto;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+
+  &:active {
+    background-color: darken($primary-color, 20%);
+  }
+}
+
+.game {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+
+  div {
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 1rem;
+  }
+
+  img {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.winner {
+  color: darkolivegreen;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.lose{
+  color: red;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}

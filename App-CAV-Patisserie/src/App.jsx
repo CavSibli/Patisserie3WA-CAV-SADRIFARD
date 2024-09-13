@@ -3,9 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useDispatch} from 'react-redux';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Game from './pages/Game';
-import './App.css'; 
-import { logout } from './features/authSlice';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,7 +27,6 @@ const App = () => {
             </div>
           </nav>
         </header>
-
         <main  style={{height:'74.4vh'}}>
         <Routes>
           <Route path="/" element={<Login />} /> 
