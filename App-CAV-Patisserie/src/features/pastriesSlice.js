@@ -4,15 +4,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchPastries = createAsyncThunk(
   'pastries/fetchPastries',
   async () => {
-    var token = localStorage.getItem('token');  
-    
-
+   
     const response = await fetch('http://localhost:3001/api/pastries', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,  
       },
+      credentials: 'include',  
     });
 
     if (!response.ok) {

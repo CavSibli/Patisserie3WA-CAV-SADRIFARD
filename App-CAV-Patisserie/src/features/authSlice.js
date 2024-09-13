@@ -11,6 +11,7 @@ export const loginUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -18,9 +19,9 @@ export const loginUser = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log(data);
-      localStorage.setItem('token', data.token);  
-      return data.user;  
+      const cookie = document.cookie;
+      console.log(cookie);
+      return { message: data.message, cookie };  
     } catch (err) {
       return rejectWithValue(err.message);
     }
